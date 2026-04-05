@@ -36,6 +36,19 @@ dotnet build NexusStrap.slnx -c Release
 
 Output: `src\NexusStrap\bin\Release\net8.0-windows10.0.19041\NexusStrap.exe`
 
+## Releases (pre-built Windows binary)
+
+Official builds are attached to [GitHub Releases](https://github.com/PhantomBum/NexusStrap/releases). Download the latest **NexusStrap-v\*-win-x64.zip**, extract the folder, and run **NexusStrap.exe** (self-contained; no separate .NET install needed).
+
+**Create a new release from git** (maintainers): push a version tag — GitHub Actions builds and uploads the zip automatically:
+
+```powershell
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+**Create a release manually** (if you use [GitHub CLI](https://cli.github.com/)): after `gh auth login`, run `.\scripts\publish-release.ps1` from the repo root (uses your local `dotnet publish` output).
+
 ## Solution layout
 
 | Project | Role |

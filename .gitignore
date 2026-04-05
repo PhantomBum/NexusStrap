@@ -54,3 +54,7 @@ $RECYCLE.BIN/
 
 ## Local tooling
 *.local.json
+
+## Local publish output (CI builds releases)
+publish/
+NexusStrap-v*.zip

@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish (self-contained win-x64)
+        run: dotnet publish src/NexusStrap/NexusStrap.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish/out
+
+      - name: Zip artifact
+        shell: pwsh
+        run: |
+          $name = "NexusStrap-${{ github.ref_name }}-win-x64.zip"
+          Compress-Archive -Path "publish/out" -DestinationPath $name -CompressionLevel Optimal
+          Get-Item $name | Format-List Name, Length
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: NexusStrap-${{ github.ref_name }}-win-x64.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
