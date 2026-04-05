@@ -1,0 +1,102 @@
+<Page
+    x:Class="NexusStrap.UI.Views.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel>
+            <TextBlock Text="Settings" FontSize="28" FontWeight="Bold" Margin="0,0,0,20" />
+
+            <!-- General -->
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="General" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Check for updates" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding CheckForUpdates, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Launch on startup" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LaunchOnStartup, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Minimize to tray" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding MinimizeToTray, Mode=TwoWay}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Features -->
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Features" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Multi-instance" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding EnableMultiInstance, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Plugins" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding EnablePlugins, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Mods" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding EnableMods, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Margin="0,8">
+                        <TextBlock Text="Macros" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding EnableMacros, Mode=TwoWay}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Protocol -->
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Protocol" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <ui:Button Content="Register" Appearance="Primary" Command="{Binding RegisterProtocolCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Unregister" Appearance="Secondary" Command="{Binding UnregisterProtocolCommand}" />
+                    </StackPanel>
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="Status: Not registered" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsProtocolRegistered}" Value="True">
+                                        <Setter Property="Text" Value="Status: Registered" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- AI Optimization -->
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="AI Optimization" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <ui:Button Content="Run" Icon="{ui:SymbolIcon Play24}" Appearance="Primary" Command="{Binding RunAiOptimizerCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Apply" Icon="{ui:SymbolIcon Checkmark24}" Appearance="Success" Command="{Binding ApplyAiOptimizationCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding AiRecommendation}" TextWrapping="Wrap" Opacity="0.85" />
+                </StackPanel>
+            </Border>
+
+            <!-- Data -->
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Data" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="Reset settings" Icon="{ui:SymbolIcon ArrowReset24}" Appearance="Danger" Command="{Binding ResetSettingsCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Open data folder" Icon="{ui:SymbolIcon FolderOpen24}" Appearance="Secondary" Command="{Binding OpenDataFolderCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <ui:Button Content="Save" Icon="{ui:SymbolIcon Save24}" Appearance="Primary" HorizontalAlignment="Left" Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>

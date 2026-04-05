@@ -1,0 +1,78 @@
+<Page
+    x:Class="NexusStrap.UI.Views.Pages.PerformancePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:models="clr-namespace:NexusStrap.Models">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel>
+            <TextBlock Text="Performance" FontSize="28" FontWeight="Bold" Margin="0,0,0,20" />
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Runtime toggles" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <ui:ToggleSwitch Content="FPS Unlocker" IsChecked="{Binding FpsUnlockerEnabled, Mode=TwoWay}" Margin="0,0,0,8" />
+                    <ui:ToggleSwitch Content="Memory Trim (periodic)" IsChecked="{Binding MemoryTrimEnabled, Mode=TwoWay}" Margin="0,0,0,8" />
+                    <ui:ToggleSwitch Content="Background Suppression" IsChecked="{Binding BackgroundSuppressionEnabled, Mode=TwoWay}" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="FPS cap" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <TextBlock Opacity="0.7" Text="0 = unlimited" FontSize="12" Margin="0,0,0,8" />
+                    <Slider Minimum="0" Maximum="360" TickFrequency="1" IsSnapToTickEnabled="True"
+                            Value="{Binding FpsCap, Mode=TwoWay}" />
+                    <TextBlock Margin="0,8,0,0">
+                        <Run Text="Target: " />
+                        <Run Text="{Binding FpsCap, Mode=OneWay}" />
+                        <Run Text=" FPS" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Memory" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <TextBlock Margin="0,0,0,8">
+                        <Run Text="Roblox working set: " />
+                        <Run Text="{Binding RobloxMemoryMb, Mode=OneWay}" FontWeight="SemiBold" />
+                        <Run Text=" MB" />
+                    </TextBlock>
+                    <ui:Button Content="Trim Memory Now" Icon="{ui:SymbolIcon Database24}" Appearance="Primary"
+                               HorizontalAlignment="Left" Command="{Binding TrimMemoryNowCommand}" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Process priority" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <TextBlock Margin="0,0,0,12" Opacity="0.8">
+                        <Run Text="Current: " />
+                        <Run Text="{Binding SelectedPriority, Mode=OneWay}" FontWeight="SemiBold" />
+                    </TextBlock>
+                    <WrapPanel Orientation="Horizontal">
+                        <ui:Button Content="Low" Margin="0,0,8,8" Command="{Binding SetPriorityCommand}"
+                                   CommandParameter="{x:Static models:ProcessPriorityLevel.Low}" />
+                        <ui:Button Content="Normal" Margin="0,0,8,8" Command="{Binding SetPriorityCommand}"
+                                   CommandParameter="{x:Static models:ProcessPriorityLevel.Normal}" />
+                        <ui:Button Content="Above Normal" Margin="0,0,8,8" Command="{Binding SetPriorityCommand}"
+                                   CommandParameter="{x:Static models:ProcessPriorityLevel.AboveNormal}" />
+                        <ui:Button Content="High" Margin="0,0,8,8" Command="{Binding SetPriorityCommand}"
+                                   CommandParameter="{x:Static models:ProcessPriorityLevel.High}" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="CPU affinity" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <TextBlock Text="{Binding ProcessorCount, StringFormat='Logical processors detected: {0}'}" Opacity="0.7" Margin="0,0,0,12" />
+                    <ui:Button Content="Reset CPU Affinity" Icon="{ui:SymbolIcon ArrowReset24}" Appearance="Secondary"
+                               HorizontalAlignment="Left" Command="{Binding ResetAffinityCommand}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

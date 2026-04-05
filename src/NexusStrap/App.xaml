@@ -1,0 +1,24 @@
+<Application
+    x:Class="NexusStrap.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    ShutdownMode="OnMainWindowClose">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- NexusStrap Theme Brushes -->
+            <SolidColorBrush x:Key="ThemePrimaryBrush" Color="#7C3AED" />
+            <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#A855F7" />
+            <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#0F0F0F" />
+            <SolidColorBrush x:Key="ThemeSurfaceBrush" Color="#1A1A2E" />
+            <SolidColorBrush x:Key="ThemeTextBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="ThemeAccentBrush" Color="#7C3AED" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

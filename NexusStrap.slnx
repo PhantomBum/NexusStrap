@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NexusStrap.PluginHost/NexusStrap.PluginHost.csproj" />
+    <Project Path="src/NexusStrap.PluginSDK/NexusStrap.PluginSDK.csproj" />
+    <Project Path="src/NexusStrap/NexusStrap.csproj" />
+  </Folder>
+</Solution>
