@@ -20,20 +20,35 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Publish (self-contained win-x64)
-        run: dotnet publish src/NexusStrap/NexusStrap.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish/out
-
-      - name: Zip artifact
+      - name: Publish single-file setup (NexusStrapSetup.exe)
         shell: pwsh
         run: |
-          $name = "NexusStrap-${{ github.ref_name }}-win-x64.zip"
-          Compress-Archive -Path "publish/out" -DestinationPath $name -CompressionLevel Optimal
-          Get-Item $name | Format-List Name, Length
+          New-Item -ItemType Directory -Path publish/staging -Force | Out-Null
+          dotnet publish src/NexusStrap/NexusStrap.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:PublishTrimmed=false `
+            -o publish/staging
+          if (-not (Test-Path "publish/staging/NexusStrap.exe")) { throw "Publish failed: NexusStrap.exe missing" }
+          Copy-Item "publish/staging/NexusStrap.exe" "NexusStrapSetup.exe" -Force
+          Get-Item "NexusStrapSetup.exe" | Format-List Name, Length
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: NexusStrap-${{ github.ref_name }}-win-x64.zip
+          files: NexusStrapSetup.exe
+          body: |
+            ## Easy install (recommended)
+
+            1. Download **NexusStrapSetup.exe** (one file — no zip).
+            2. Double-click to run. No separate .NET install; runtime is bundled.
+            3. First launch may take a moment while Windows verifies the file.
+
+            **Windows 10 (19041+)** or **Windows 11**, 64-bit.
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

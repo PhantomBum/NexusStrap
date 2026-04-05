@@ -66,7 +66,22 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void RegisterProtocol()
     {
-        var exePath = Environment.ProcessPath ?? System.Reflection.Assembly.GetExecutingAssembly().Location;
+        // Single-file publish: Assembly.Location is empty; prefer ProcessPath / MainModule.
+        var exePath = Environment.ProcessPath;
+        if (string.IsNullOrEmpty(exePath))
+        {
+            using var p = System.Diagnostics.Process.GetCurrentProcess();
+            exePath = p.MainModule?.FileName ?? string.Empty;
+        }
+
+        if (string.IsNullOrEmpty(exePath))
+        {
+            var argv0 = Environment.GetCommandLineArgs()[0];
+            exePath = Path.IsPathRooted(argv0)
+                ? argv0
+                : Path.Combine(AppContext.BaseDirectory, Path.GetFileName(argv0));
+        }
+
         _protocolHandler.RegisterProtocols(exePath);
         _registryManager.RegisterApp(Path.GetDirectoryName(exePath)!, "1.0.0");
         IsProtocolRegistered = true;
