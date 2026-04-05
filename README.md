@@ -1,6 +1,8 @@
 # NexusStrap
 
-A modern, modular Roblox launcher for Windows (WPF + .NET 8), inspired by tools like Bloxstrap. It provides a dashboard, performance options, FastFlags, mods, plugins, macros, and more—all at the launcher/config level (no injection or anti-cheat bypass).
+Bootstrapper and launcher for Roblox on Windows.
+
+A modern, modular Roblox launcher (WPF + .NET 8), inspired by tools like Bloxstrap. It provides a dashboard, performance options, FastFlags, mods, plugins, macros, and more—all at the launcher/config level (no injection or anti-cheat bypass).
 
 **Repository:** [github.com/PhantomBum/NexusStrap](https://github.com/PhantomBum/NexusStrap)
 
