@@ -8,12 +8,15 @@
     xmlns:pages="clr-namespace:NexusStrap.UI.Views.Pages"
     mc:Ignorable="d"
     Title="NexusStrap"
-    Width="1280" Height="800"
-    MinWidth="960" MinHeight="600"
+    Width="1071"
+    Height="690"
+    MinWidth="900"
+    MinHeight="560"
     WindowStartupLocation="CenterScreen"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    Background="{DynamicResource ThemeBackgroundBrush}">
 
-    <Grid>
+    <Grid Background="{DynamicResource ThemeBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -28,18 +31,30 @@
             PaneDisplayMode="Left"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleVisible="True"
-            OpenPaneLength="220">
+            OpenPaneLength="252"
+            CompactPaneLength="48"
+            PaneTitle="Menu"
+            FrameMargin="16,8,20,16">
 
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Dashboard" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:DashboardPage}" />
-                <ui:NavigationViewItem Content="Performance" Icon="{ui:SymbolIcon TopSpeed24}" TargetPageType="{x:Type pages:PerformancePage}" />
+                <ui:NavigationViewItemHeader Text="Launcher" />
+                <ui:NavigationViewItem Content="Home" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:DashboardPage}" />
                 <ui:NavigationViewItem Content="Servers" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:ServerPage}" />
-                <ui:NavigationViewItem Content="FastFlags" Icon="{ui:SymbolIcon Flag24}" TargetPageType="{x:Type pages:FastFlagPage}" />
+
+                <ui:NavigationViewItemHeader Text="Performance" />
+                <ui:NavigationViewItem Content="Performance" Icon="{ui:SymbolIcon TopSpeed24}" TargetPageType="{x:Type pages:PerformancePage}" />
+                <ui:NavigationViewItem Content="Monitor" Icon="{ui:SymbolIcon DataUsage24}" TargetPageType="{x:Type pages:MonitorPage}" />
+
+                <ui:NavigationViewItemHeader Text="Experience" />
                 <ui:NavigationViewItem Content="Mods" Icon="{ui:SymbolIcon PuzzlePiece24}" TargetPageType="{x:Type pages:ModsPage}" />
                 <ui:NavigationViewItem Content="Plugins" Icon="{ui:SymbolIcon PlugConnected24}" TargetPageType="{x:Type pages:PluginsPage}" />
+                <ui:NavigationViewItem Content="FastFlags" Icon="{ui:SymbolIcon Flag24}" TargetPageType="{x:Type pages:FastFlagPage}" />
+
+                <ui:NavigationViewItemHeader Text="Personalization" />
+                <ui:NavigationViewItem Content="Appearance" Icon="{ui:SymbolIcon PaintBrush24}" TargetPageType="{x:Type pages:CustomizationPage}" />
                 <ui:NavigationViewItem Content="Macros" Icon="{ui:SymbolIcon Keyboard24}" TargetPageType="{x:Type pages:MacrosPage}" />
-                <ui:NavigationViewItem Content="Customize" Icon="{ui:SymbolIcon PaintBrush24}" TargetPageType="{x:Type pages:CustomizationPage}" />
-                <ui:NavigationViewItem Content="Monitor" Icon="{ui:SymbolIcon DataUsage24}" TargetPageType="{x:Type pages:MonitorPage}" />
+
+                <ui:NavigationViewItemHeader Text="System" />
                 <ui:NavigationViewItem Content="Utilities" Icon="{ui:SymbolIcon Wrench24}" TargetPageType="{x:Type pages:UtilitiesPage}" />
                 <ui:NavigationViewItem Content="Stability" Icon="{ui:SymbolIcon ShieldCheckmark24}" TargetPageType="{x:Type pages:StabilityPage}" />
                 <ui:NavigationViewItem Content="Social" Icon="{ui:SymbolIcon People24}" TargetPageType="{x:Type pages:SocialPage}" />
@@ -48,16 +63,19 @@
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="Settings" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:SettingsPage}" />
             </ui:NavigationView.FooterMenuItems>
-
         </ui:NavigationView>
 
-        <!-- Status Bar -->
-        <Border Grid.Row="2" Background="{DynamicResource ThemeSurfaceBrush}" Padding="12,4">
+        <Border
+            Grid.Row="2"
+            Background="{DynamicResource ThemeSurfaceBrush}"
+            BorderBrush="{DynamicResource ThemeBorderBrush}"
+            BorderThickness="0,1,0,0"
+            Padding="14,8">
             <Grid>
-                <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Opacity="0.7" FontSize="11" />
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource ThemeMutedTextBrush}" FontSize="11" Text="{Binding StatusMessage}" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding RobloxVersion}" Margin="0,0,16,0" Opacity="0.5" FontSize="11" />
-                    <TextBlock Text="NexusStrap v1.0.0" Opacity="0.5" FontSize="11" />
+                    <TextBlock Margin="0,0,16,0" Foreground="{DynamicResource ThemeMutedTextBrush}" FontSize="11" Text="{Binding RobloxVersion}" />
+                    <TextBlock Foreground="{DynamicResource ThemeMutedTextBrush}" FontSize="11" Text="{Binding AppVersion}" />
                 </StackPanel>
             </Grid>
         </Border>

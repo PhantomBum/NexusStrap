@@ -82,6 +82,19 @@ public sealed class ThemeService
             app.Resources["ThemeTextBrush"] = new SolidColorBrush(ParseColor(theme.TextColor));
             app.Resources["ThemeAccentBrush"] = new SolidColorBrush(ParseColor(theme.AccentColor));
 
+            if (theme.IsDark)
+            {
+                app.Resources["ThemeBorderBrush"] = new SolidColorBrush(ParseColor("#30363D"));
+                app.Resources["ThemeSurfaceElevatedBrush"] = new SolidColorBrush(ParseColor("#21262D"));
+                app.Resources["ThemeMutedTextBrush"] = new SolidColorBrush(ParseColor("#8B949E"));
+            }
+            else
+            {
+                app.Resources["ThemeBorderBrush"] = new SolidColorBrush(ParseColor("#D0D7DE"));
+                app.Resources["ThemeSurfaceElevatedBrush"] = new SolidColorBrush(ParseColor("#FFFFFF"));
+                app.Resources["ThemeMutedTextBrush"] = new SolidColorBrush(ParseColor("#57606A"));
+            }
+
             Wpf.Ui.Appearance.ApplicationThemeManager.Apply(
                 theme.IsDark ? Wpf.Ui.Appearance.ApplicationTheme.Dark : Wpf.Ui.Appearance.ApplicationTheme.Light);
         });
@@ -96,16 +109,16 @@ public sealed class ThemeService
     private static ThemeDefinition GetDefaultDarkTheme() => new()
     {
         Id = "dark", Name = "NexusStrap Dark", Author = "NexusStrap", IsDark = true,
-        PrimaryColor = "#7C3AED", SecondaryColor = "#A855F7",
-        BackgroundColor = "#0F0F0F", SurfaceColor = "#1A1A2E",
-        TextColor = "#FFFFFF", AccentColor = "#7C3AED"
+        PrimaryColor = "#E11D48", SecondaryColor = "#FB7185",
+        BackgroundColor = "#0D1117", SurfaceColor = "#161B22",
+        TextColor = "#F0F6FC", AccentColor = "#E11D48"
     };
 
     private static ThemeDefinition GetDefaultLightTheme() => new()
     {
         Id = "light", Name = "NexusStrap Light", Author = "NexusStrap", IsDark = false,
-        PrimaryColor = "#7C3AED", SecondaryColor = "#A855F7",
-        BackgroundColor = "#F8F8F8", SurfaceColor = "#FFFFFF",
-        TextColor = "#1A1A2E", AccentColor = "#7C3AED"
+        PrimaryColor = "#E11D48", SecondaryColor = "#FB7185",
+        BackgroundColor = "#F6F8FA", SurfaceColor = "#FFFFFF",
+        TextColor = "#24292F", AccentColor = "#E11D48"
     };
 }

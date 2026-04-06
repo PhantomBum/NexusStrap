@@ -12,13 +12,25 @@
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- NexusStrap Theme Brushes -->
-            <SolidColorBrush x:Key="ThemePrimaryBrush" Color="#7C3AED" />
-            <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#A855F7" />
-            <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#0F0F0F" />
-            <SolidColorBrush x:Key="ThemeSurfaceBrush" Color="#1A1A2E" />
-            <SolidColorBrush x:Key="ThemeTextBrush" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="ThemeAccentBrush" Color="#7C3AED" />
+            <!-- Voidstrap / Bloxstrap-inspired dark shell (GitHub-style dark + red accent) -->
+            <SolidColorBrush x:Key="ThemePrimaryBrush" Color="#E11D48" />
+            <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#FB7185" />
+            <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#0D1117" />
+            <SolidColorBrush x:Key="ThemeSurfaceBrush" Color="#161B22" />
+            <SolidColorBrush x:Key="ThemeSurfaceElevatedBrush" Color="#21262D" />
+            <SolidColorBrush x:Key="ThemeBorderBrush" Color="#30363D" />
+            <SolidColorBrush x:Key="ThemeTextBrush" Color="#F0F6FC" />
+            <SolidColorBrush x:Key="ThemeAccentBrush" Color="#E11D48" />
+            <SolidColorBrush x:Key="ThemeMutedTextBrush" Color="#8B949E" />
+
+            <!-- Smooth scrolling; avoids nested pixel scroll issues with charts. -->
+            <Style x:Key="PageScrollViewer" TargetType="ScrollViewer">
+                <Setter Property="CanContentScroll" Value="False" />
+                <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="PanningMode" Value="VerticalOnly" />
+                <Setter Property="Focusable" Value="True" />
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
