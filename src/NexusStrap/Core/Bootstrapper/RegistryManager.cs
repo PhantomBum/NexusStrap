@@ -47,6 +47,8 @@ public sealed class RegistryManager
         }
     }
 
+    public const string RobloxPlayerExeName = "RobloxPlayerBeta.exe";
+
     public static string? GetRobloxInstallPath()
     {
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -60,13 +62,39 @@ public sealed class RegistryManager
         return Path.Combine(localAppData, "Roblox", "Versions");
     }
 
+    /// <summary>
+    /// Finds a directory containing <see cref="RobloxPlayerExeName"/> (standard Roblox Windows install under
+    /// %LocalAppData%\Roblox\Versions\&lt;hash&gt;). Prefers <paramref name="preferredVersionGuid"/>, then
+    /// <paramref name="installDirectoryHint"/> if it points at a valid player folder.
+    /// </summary>
+    public static string? FindRobloxPlayerDirectory(string? preferredVersionGuid = null, string? installDirectoryHint = null)
+    {
+        var versionsPath = GetRobloxVersionsPath();
+
+        if (!string.IsNullOrWhiteSpace(preferredVersionGuid))
+        {
+            var candidate = Path.Combine(versionsPath, preferredVersionGuid.Trim());
+            if (File.Exists(Path.Combine(candidate, RobloxPlayerExeName)))
+                return Path.GetFullPath(candidate);
+        }
+
+        if (!string.IsNullOrWhiteSpace(installDirectoryHint))
+        {
+            var hint = installDirectoryHint.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            if (File.Exists(Path.Combine(hint, RobloxPlayerExeName)))
+                return Path.GetFullPath(hint);
+        }
+
+        return GetCurrentRobloxVersionPath();
+    }
+
     public static string? GetCurrentRobloxVersionPath()
     {
         var versionsPath = GetRobloxVersionsPath();
         if (!Directory.Exists(versionsPath)) return null;
 
         return Directory.GetDirectories(versionsPath)
-            .Where(d => File.Exists(Path.Combine(d, "RobloxPlayerBeta.exe")))
+            .Where(d => File.Exists(Path.Combine(d, RobloxPlayerExeName)))
             .OrderByDescending(d => Directory.GetLastWriteTime(d))
             .FirstOrDefault();
     }

@@ -31,7 +31,7 @@ public sealed class DiagnosticsEngine
 
         if (robloxPath is not null)
         {
-            var exePath = Path.Combine(robloxPath, "RobloxPlayerBeta.exe");
+            var exePath = Path.Combine(robloxPath, RegistryManager.RobloxPlayerExeName);
             report.RobloxExeExists = File.Exists(exePath);
         }
 

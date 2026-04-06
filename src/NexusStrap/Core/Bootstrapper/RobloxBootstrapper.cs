@@ -51,33 +51,91 @@ public sealed class RobloxBootstrapper
 
             if (versionInfo is null)
             {
-                _log.Error("Could not retrieve version info from Roblox servers");
-                StatusChanged?.Invoke("Failed to check for updates");
-                return false;
+                var offlineDir = RegistryManager.FindRobloxPlayerDirectory(
+                    preferredVersionGuid: _settings.RobloxState.InstalledVersionGuid,
+                    installDirectoryHint: _settings.RobloxState.InstallDirectory);
+
+                if (offlineDir is null)
+                {
+                    _log.Error("Could not reach Roblox version API and no local RobloxPlayer install was found under {Versions}",
+                        RegistryManager.GetRobloxVersionsPath());
+                    StatusChanged?.Invoke("Roblox not installed (or install Roblox from roblox.com)");
+                    return false;
+                }
+
+                _log.Warning("Version API unavailable: launching from local install {Dir}", offlineDir);
+                StatusChanged?.Invoke("Applying settings...");
+                _fastFlagManager.ApplyFlags(offlineDir);
+                StatusChanged?.Invoke("Launching Roblox...");
+                await LaunchRobloxFromDirectoryAsync(offlineDir, launchUri, ct);
+                SyncRobloxStateFromInstallDirectory(offlineDir);
+
+                _settings.State.LastLaunch = DateTime.Now;
+                _settings.SaveState();
+                _eventBus.Publish(PluginSDK.Events.LauncherEvents.OnLaunch, launchUri);
+                _log.Info("=== NexusStrap Bootstrap Complete (offline) ===");
+                return true;
             }
 
             var needsUpdate = _versionChecker.IsUpdateRequired(
                 _settings.RobloxState.InstalledVersionGuid,
                 versionInfo.ClientVersionUpload);
 
-            if (needsUpdate)
+            var localLatestMatch = RegistryManager.FindRobloxPlayerDirectory(
+                preferredVersionGuid: versionInfo.ClientVersionUpload,
+                installDirectoryHint: null);
+
+            if (needsUpdate && localLatestMatch is null)
             {
                 StatusChanged?.Invoke($"Updating Roblox to {versionInfo.Version}...");
                 await UpdateRobloxAsync(versionInfo, ct);
+            }
+            else if (needsUpdate && localLatestMatch is not null)
+            {
+                _log.Info(
+                    "Latest Roblox build already on disk at {Dir}; skipping download (sync NexusStrap state)",
+                    localLatestMatch);
+                _settings.RobloxState.InstalledVersionGuid = versionInfo.ClientVersionUpload;
+                _settings.RobloxState.InstallDirectory = localLatestMatch;
+                _settings.RobloxState.InstalledVersionNumber = versionInfo.Version;
+                if (!_settings.RobloxState.InstalledVersions.Contains(versionInfo.ClientVersionUpload))
+                    _settings.RobloxState.InstalledVersions.Add(versionInfo.ClientVersionUpload);
+                _settings.SaveRobloxState();
             }
             else
             {
                 _log.Info("Roblox is up to date: {Version}", versionInfo.ClientVersionUpload);
             }
 
+            var versionDir = RegistryManager.FindRobloxPlayerDirectory(
+                preferredVersionGuid: versionInfo.ClientVersionUpload,
+                installDirectoryHint: _settings.RobloxState.InstallDirectory);
+
+            if (versionDir is null)
+            {
+                versionDir = RegistryManager.GetCurrentRobloxVersionPath();
+                if (versionDir is not null)
+                {
+                    _log.Warning(
+                        "Expected player folder for {Expected} not found; launching from latest local install {Actual}",
+                        versionInfo.ClientVersionUpload,
+                        versionDir);
+                }
+            }
+
+            if (versionDir is null)
+            {
+                _log.Error("RobloxPlayer not found under {Versions}", RegistryManager.GetRobloxVersionsPath());
+                StatusChanged?.Invoke("Roblox player not found — install Roblox from roblox.com");
+                return false;
+            }
+
             StatusChanged?.Invoke("Applying settings...");
-            var versionDir = Path.Combine(
-                RegistryManager.GetRobloxVersionsPath(),
-                versionInfo.ClientVersionUpload);
             _fastFlagManager.ApplyFlags(versionDir);
 
             StatusChanged?.Invoke("Launching Roblox...");
-            await LaunchRobloxAsync(versionInfo.ClientVersionUpload, launchUri, ct);
+            await LaunchRobloxFromDirectoryAsync(versionDir, launchUri, ct);
+            SyncRobloxStateFromInstallDirectory(versionDir);
 
             _settings.State.LastLaunch = DateTime.Now;
             _settings.SaveState();
@@ -138,13 +196,12 @@ public sealed class RobloxBootstrapper
         ProgressChanged?.Invoke(1.0);
     }
 
-    private async Task LaunchRobloxAsync(string versionGuid, string? launchUri, CancellationToken ct)
+    private async Task LaunchRobloxFromDirectoryAsync(string versionDir, string? launchUri, CancellationToken ct)
     {
-        var versionDir = Path.Combine(RegistryManager.GetRobloxVersionsPath(), versionGuid);
-        var exePath = Path.Combine(versionDir, "RobloxPlayerBeta.exe");
+        var exePath = Path.Combine(versionDir, RegistryManager.RobloxPlayerExeName);
 
         if (!File.Exists(exePath))
-            throw new FileNotFoundException("RobloxPlayerBeta.exe not found", exePath);
+            throw new FileNotFoundException($"{RegistryManager.RobloxPlayerExeName} not found", exePath);
 
         var arguments = launchUri ?? "roblox-player:1+launchmode:app";
 
@@ -163,5 +220,18 @@ public sealed class RobloxBootstrapper
             await Task.Delay(500, ct);
             _log.Info("Roblox launched with PID {Pid}", process.Id);
         }
+    }
+
+    /// <summary>Keep saved settings aligned with the folder we actually launched from.</summary>
+    private void SyncRobloxStateFromInstallDirectory(string versionDir)
+    {
+        var guid = Path.GetFileName(versionDir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        if (string.IsNullOrEmpty(guid)) return;
+
+        _settings.RobloxState.InstalledVersionGuid = guid;
+        _settings.RobloxState.InstallDirectory = versionDir;
+        if (!_settings.RobloxState.InstalledVersions.Contains(guid))
+            _settings.RobloxState.InstalledVersions.Add(guid);
+        _settings.SaveRobloxState();
     }
 }

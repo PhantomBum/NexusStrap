@@ -30,10 +30,10 @@ public sealed class InstallManager
             return false;
         }
 
-        var exePath = Path.Combine(versionDir, "RobloxPlayerBeta.exe");
+        var exePath = Path.Combine(versionDir, RegistryManager.RobloxPlayerExeName);
         if (!File.Exists(exePath))
         {
-            _log.Warning("RobloxPlayerBeta.exe missing from {Dir}", versionDir);
+            _log.Warning("{Exe} missing from {Dir}", RegistryManager.RobloxPlayerExeName, versionDir);
             return false;
         }
 

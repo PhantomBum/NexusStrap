@@ -20,7 +20,7 @@ public sealed class VersionManager
         if (!Directory.Exists(versionsDir)) return Array.Empty<InstalledVersion>();
 
         return Directory.GetDirectories(versionsDir)
-            .Where(d => File.Exists(Path.Combine(d, "RobloxPlayerBeta.exe")))
+            .Where(d => File.Exists(Path.Combine(d, RegistryManager.RobloxPlayerExeName)))
             .Select(d => new InstalledVersion
             {
                 VersionGuid = Path.GetFileName(d),
@@ -36,7 +36,7 @@ public sealed class VersionManager
     public bool SwitchVersion(string versionGuid)
     {
         var versionDir = Path.Combine(RegistryManager.GetRobloxVersionsPath(), versionGuid);
-        if (!Directory.Exists(versionDir) || !File.Exists(Path.Combine(versionDir, "RobloxPlayerBeta.exe")))
+        if (!Directory.Exists(versionDir) || !File.Exists(Path.Combine(versionDir, RegistryManager.RobloxPlayerExeName)))
         {
             _log.Warning("Cannot switch to version {Guid}: not found", versionGuid);
             return false;
