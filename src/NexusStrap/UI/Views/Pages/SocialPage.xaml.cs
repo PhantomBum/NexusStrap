@@ -8,7 +8,7 @@ public partial class SocialPage : Page
 {
     public SocialPage()
     {
-        DataContext = App.Services.GetRequiredService<SocialViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<SocialViewModel>();
     }
 }

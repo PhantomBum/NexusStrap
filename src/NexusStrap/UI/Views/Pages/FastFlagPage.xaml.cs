@@ -8,7 +8,7 @@ public partial class FastFlagPage : Page
 {
     public FastFlagPage()
     {
-        DataContext = App.Services.GetRequiredService<FastFlagViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<FastFlagViewModel>();
     }
 }

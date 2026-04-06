@@ -8,7 +8,7 @@ public partial class MacrosPage : Page
 {
     public MacrosPage()
     {
-        DataContext = App.Services.GetRequiredService<MacrosViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<MacrosViewModel>();
     }
 }

@@ -8,7 +8,7 @@ public partial class DashboardPage : Page
 {
     public DashboardPage()
     {
-        DataContext = App.Services.GetRequiredService<DashboardViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<DashboardViewModel>();
     }
 }

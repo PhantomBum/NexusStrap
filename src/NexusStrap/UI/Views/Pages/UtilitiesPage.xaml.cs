@@ -8,7 +8,7 @@ public partial class UtilitiesPage : Page
 {
     public UtilitiesPage()
     {
-        DataContext = App.Services.GetRequiredService<UtilitiesViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<UtilitiesViewModel>();
     }
 }

@@ -8,7 +8,7 @@ public partial class PerformancePage : Page
 {
     public PerformancePage()
     {
-        DataContext = App.Services.GetRequiredService<PerformanceViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<PerformanceViewModel>();
     }
 }

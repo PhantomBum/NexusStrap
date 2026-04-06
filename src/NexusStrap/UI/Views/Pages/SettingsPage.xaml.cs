@@ -8,7 +8,7 @@ public partial class SettingsPage : Page
 {
     public SettingsPage()
     {
-        DataContext = App.Services.GetRequiredService<SettingsViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<SettingsViewModel>();
     }
 }

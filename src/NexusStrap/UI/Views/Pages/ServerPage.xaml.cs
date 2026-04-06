@@ -8,7 +8,7 @@ public partial class ServerPage : Page
 {
     public ServerPage()
     {
-        DataContext = App.Services.GetRequiredService<ServerViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<ServerViewModel>();
     }
 }

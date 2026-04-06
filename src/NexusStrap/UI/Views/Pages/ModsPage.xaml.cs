@@ -8,7 +8,7 @@ public partial class ModsPage : Page
 {
     public ModsPage()
     {
-        DataContext = App.Services.GetRequiredService<ModsViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<ModsViewModel>();
     }
 }

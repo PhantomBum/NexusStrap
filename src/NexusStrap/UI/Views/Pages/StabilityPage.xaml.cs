@@ -8,7 +8,7 @@ public partial class StabilityPage : Page
 {
     public StabilityPage()
     {
-        DataContext = App.Services.GetRequiredService<StabilityViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<StabilityViewModel>();
     }
 }

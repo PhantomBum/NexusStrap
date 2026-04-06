@@ -18,6 +18,7 @@ using NexusStrap.PluginHost;
 using NexusStrap.Services;
 using NexusStrap.UI.ViewModels;
 using NexusStrap.UI.Views;
+using NexusStrap.UI.Views.Pages;
 
 namespace NexusStrap;
 
@@ -29,6 +30,19 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        try
+        {
+            RunStartup(e);
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.WriteFatal(ex);
+            Shutdown(-1);
+        }
+    }
+
+    private void RunStartup(StartupEventArgs e)
+    {
         var services = new ServiceCollection();
         ConfigureServices(services);
         Services = services.BuildServiceProvider();
@@ -176,7 +190,20 @@ public partial class App : Application
         services.AddTransient<StabilityViewModel>();
         services.AddTransient<SocialViewModel>();
 
-        // Views
+        // Views — MainWindow + all navigation pages (WPF-UI NavigationView resolves pages via IServiceProvider)
         services.AddSingleton<MainWindow>();
+        services.AddTransient<DashboardPage>();
+        services.AddTransient<PerformancePage>();
+        services.AddTransient<ServerPage>();
+        services.AddTransient<FastFlagPage>();
+        services.AddTransient<ModsPage>();
+        services.AddTransient<PluginsPage>();
+        services.AddTransient<MacrosPage>();
+        services.AddTransient<CustomizationPage>();
+        services.AddTransient<MonitorPage>();
+        services.AddTransient<UtilitiesPage>();
+        services.AddTransient<SettingsPage>();
+        services.AddTransient<StabilityPage>();
+        services.AddTransient<SocialPage>();
     }
 }

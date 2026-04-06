@@ -8,7 +8,7 @@ public partial class CustomizationPage : Page
 {
     public CustomizationPage()
     {
-        DataContext = App.Services.GetRequiredService<CustomizationViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<CustomizationViewModel>();
     }
 }

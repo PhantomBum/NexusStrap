@@ -8,7 +8,7 @@ public partial class PluginsPage : Page
 {
     public PluginsPage()
     {
-        DataContext = App.Services.GetRequiredService<PluginsViewModel>();
         InitializeComponent();
+        DataContext = App.Services.GetRequiredService<PluginsViewModel>();
     }
 }

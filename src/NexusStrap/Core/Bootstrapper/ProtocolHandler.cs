@@ -53,12 +53,12 @@ public sealed class ProtocolHandler
             args.Protocol = "roblox";
             args.RawUri = uri;
             var uriObj = new Uri(uri);
-            var query = System.Web.HttpUtility.ParseQueryString(uriObj.Query);
-            args.PlaceId = query["placeId"];
-            args.GameInstanceId = query["gameInstanceId"];
-            args.LaunchData = query["launchData"];
-            args.AccessCode = query["accessCode"];
-            args.LinkCode = query["linkCode"];
+            var query = ParseQueryString(uriObj.Query);
+            args.PlaceId = query.GetValueOrDefault("placeId");
+            args.GameInstanceId = query.GetValueOrDefault("gameInstanceId");
+            args.LaunchData = query.GetValueOrDefault("launchData");
+            args.AccessCode = query.GetValueOrDefault("accessCode");
+            args.LinkCode = query.GetValueOrDefault("linkCode");
             return args;
         }
 
@@ -100,6 +100,23 @@ public sealed class ProtocolHandler
         {
             _log.Error(ex, "Failed to register protocol {Protocol}", protocol);
         }
+    }
+
+    private static Dictionary<string, string> ParseQueryString(string query)
+    {
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrEmpty(query) || query == "?")
+            return result;
+        var q = query.TrimStart('?');
+        foreach (var part in q.Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var kv = part.Split('=', 2);
+            if (kv.Length != 2) continue;
+            var key = Uri.UnescapeDataString(kv[0].Trim());
+            var value = Uri.UnescapeDataString(kv[1].Trim());
+            result[key] = value;
+        }
+        return result;
     }
 
     private void UnregisterProtocol(string protocol)
