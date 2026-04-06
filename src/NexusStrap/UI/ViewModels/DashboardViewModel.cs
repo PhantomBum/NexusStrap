@@ -24,6 +24,7 @@ public partial class DashboardViewModel : ObservableObject
     private readonly PerformancePresetManager _presetManager;
     private readonly BottleneckDetector _bottleneckDetector;
     private readonly SettingsService _settings;
+    private readonly NotificationService _notifications;
 
     private readonly ObservableCollection<ObservableValue> _fpsValues = new();
     private readonly ObservableCollection<ObservableValue> _cpuValues = new();
@@ -50,13 +51,15 @@ public partial class DashboardViewModel : ObservableObject
         LaunchController launcher,
         PerformancePresetManager presetManager,
         BottleneckDetector bottleneckDetector,
-        SettingsService settings)
+        SettingsService settings,
+        NotificationService notifications)
     {
         _monitor = monitor;
         _launcher = launcher;
         _presetManager = presetManager;
         _bottleneckDetector = bottleneckDetector;
         _settings = settings;
+        _notifications = notifications;
 
         FpsSeries = new ISeries[]
         {
@@ -127,9 +130,27 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task LaunchRoblox()
     {
+        void OnStatus(string message)
+        {
+            System.Windows.Application.Current?.Dispatcher.Invoke(() =>
+                _notifications.ShowStatus(message));
+        }
+
+        _launcher.StatusChanged += OnStatus;
         try
         {
-            await _launcher.LaunchDesktopAppAsync();
+            var ok = await _launcher.LaunchDesktopAppAsync();
+            if (!ok)
+            {
+                MessageBox.Show(
+                    "Roblox did not launch.\n\n" +
+                    "• Install the Roblox desktop app from https://www.roblox.com first.\n" +
+                    "• Allow NexusStrap through your firewall if the version check times out.\n" +
+                    "• See logs: %LocalAppData%\\NexusStrap\\Logs",
+                    "NexusStrap",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
         }
         catch (Exception ex)
         {
@@ -138,6 +159,11 @@ public partial class DashboardViewModel : ObservableObject
                 "NexusStrap",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
+        }
+        finally
+        {
+            _launcher.StatusChanged -= OnStatus;
+            _notifications.ClearStatus();
         }
     }
 

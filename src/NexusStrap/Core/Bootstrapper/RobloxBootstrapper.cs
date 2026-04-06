@@ -205,21 +205,45 @@ public sealed class RobloxBootstrapper
 
         var arguments = launchUri ?? "roblox-player:1+launchmode:app";
 
-        var psi = new ProcessStartInfo
+        try
         {
-            FileName = exePath,
-            Arguments = arguments,
-            UseShellExecute = false,
-            WorkingDirectory = versionDir
-        };
+            var psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                WorkingDirectory = versionDir
+            };
 
-        _log.Info("Launching {Exe} with args: {Args}", exePath, arguments);
-        var process = Process.Start(psi);
-        if (process is not null)
-        {
-            await Task.Delay(500, ct);
-            _log.Info("Roblox launched with PID {Pid}", process.Id);
+            _log.Info("Launching {Exe} with args: {Args}", exePath, arguments);
+            var process = Process.Start(psi);
+            if (process is null)
+            {
+                _log.Warning("Process.Start returned null for {Exe}; opening roblox-player via shell.", exePath);
+                StartRobloxWithProtocol(arguments);
+            }
+            else
+            {
+                await Task.Delay(500, ct);
+                _log.Info("Roblox launched with PID {Pid}", process.Id);
+            }
         }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _log.Error(ex, "Direct player launch failed; trying registered roblox-player protocol.");
+            StartRobloxWithProtocol(arguments);
+            await Task.Delay(400, ct);
+        }
+    }
+
+    /// <summary>Uses the OS-registered <c>roblox-player:</c> / protocol handler (same as Start menu shortcut).</summary>
+    private static void StartRobloxWithProtocol(string launchArguments)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = launchArguments,
+            UseShellExecute = true
+        });
     }
 
     /// <summary>Keep saved settings aligned with the folder we actually launched from.</summary>

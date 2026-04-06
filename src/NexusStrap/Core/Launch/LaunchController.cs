@@ -10,6 +10,13 @@ public sealed class LaunchController
     private readonly SettingsService _settings;
     private readonly LogService _log;
 
+    /// <summary>Forwards bootstrap progress (version check, download, launch) to the UI.</summary>
+    public event Action<string>? StatusChanged
+    {
+        add => _bootstrapper.StatusChanged += value;
+        remove => _bootstrapper.StatusChanged -= value;
+    }
+
     public LaunchController(
         RobloxBootstrapper bootstrapper,
         ProtocolHandler protocolHandler,
