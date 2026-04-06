@@ -23,6 +23,11 @@
             <SolidColorBrush x:Key="ThemeAccentBrush" Color="#E11D48" />
             <SolidColorBrush x:Key="ThemeMutedTextBrush" Color="#8B949E" />
 
+            <!-- WPF-UI NavigationView wraps pages in a DynamicScrollViewer; without this, Page gets infinite height and inner ScrollViewers never scroll (github.com/lepoco/wpfui/issues/1041). -->
+            <Style TargetType="Page">
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+            </Style>
+
             <!-- Smooth scrolling; avoids nested pixel scroll issues with charts. -->
             <Style x:Key="PageScrollViewer" TargetType="ScrollViewer">
                 <Setter Property="CanContentScroll" Value="False" />
