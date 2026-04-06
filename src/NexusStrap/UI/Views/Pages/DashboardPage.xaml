@@ -14,8 +14,13 @@
                     <TextBlock Text="{Binding RobloxStatus}" Opacity="0.6" Margin="0,4,0,0" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <ui:Button Content="Launch Roblox" Icon="{ui:SymbolIcon Play24}" Appearance="Primary"
-                               Command="{Binding LaunchRobloxCommand}" Margin="0,0,8,0" />
+                    <ui:Button Content="Play" FontSize="15" FontWeight="SemiBold"
+                               Icon="{ui:SymbolIcon Play24}" Appearance="Primary"
+                               Command="{Binding LaunchRobloxCommand}" Margin="0,0,8,0"
+                               ToolTip="Launch Roblox home (same as Voidstrap / Bloxstrap desktop app)" />
+                    <ui:Button Content="Roblox.com" Icon="{ui:SymbolIcon Globe24}" Appearance="Secondary"
+                               Command="{Binding OpenRobloxWebsiteCommand}"
+                               ToolTip="Open Roblox in your browser" />
                 </StackPanel>
             </Grid>
 
@@ -87,7 +92,7 @@
                     <StackPanel Orientation="Horizontal">
                         <ui:Button Content="Performance" Icon="{ui:SymbolIcon TopSpeed24}" Appearance="Danger"
                                    Command="{Binding ApplyPerformanceModeCommand}" Margin="0,0,8,0" />
-                        <ui:Button Content="Balanced" Icon="{ui:SymbolIcon Balance24}" Appearance="Primary"
+                        <ui:Button Content="Balanced" Icon="{ui:SymbolIcon Scales24}" Appearance="Primary"
                                    Command="{Binding ApplyBalancedModeCommand}" Margin="0,0,8,0" />
                         <ui:Button Content="Quality" Icon="{ui:SymbolIcon Sparkle24}" Appearance="Success"
                                    Command="{Binding ApplyQualityModeCommand}" />

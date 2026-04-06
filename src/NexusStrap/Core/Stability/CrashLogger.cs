@@ -1,3 +1,4 @@
+using System.Windows;
 using NexusStrap.Services;
 
 namespace NexusStrap.Core.Stability;
@@ -15,6 +16,12 @@ public sealed class CrashLogger
 
     public void RegisterGlobalHandlers()
     {
+        Application.Current.DispatcherUnhandledException += (_, args) =>
+        {
+            _log.Error(args.Exception, "Dispatcher unhandled exception");
+            SaveCrashReport(args.Exception);
+        };
+
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
         {
             var ex = args.ExceptionObject as Exception;

@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
@@ -125,7 +127,40 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task LaunchRoblox()
     {
-        await _launcher.LaunchDesktopAppAsync();
+        try
+        {
+            await _launcher.LaunchDesktopAppAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Could not launch Roblox.\n\n{ex.Message}",
+                "NexusStrap",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
+
+    /// <summary>Opens the Roblox website (Voidstrap-style companion to the in-app Play button).</summary>
+    [RelayCommand]
+    private void OpenRobloxWebsite()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.roblox.com/home",
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Could not open the browser.\n\n{ex.Message}",
+                "NexusStrap",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
     }
 
     [RelayCommand]
