@@ -35,7 +35,7 @@
                 <ui:NavigationViewItem Content="Performance" Icon="{ui:SymbolIcon TopSpeed24}" TargetPageType="{x:Type pages:PerformancePage}" />
                 <ui:NavigationViewItem Content="Servers" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:ServerPage}" />
                 <ui:NavigationViewItem Content="FastFlags" Icon="{ui:SymbolIcon Flag24}" TargetPageType="{x:Type pages:FastFlagPage}" />
-                <ui:NavigationViewItem Content="Mods" Icon="{ui:SymbolIcon Puzzle24}" TargetPageType="{x:Type pages:ModsPage}" />
+                <ui:NavigationViewItem Content="Mods" Icon="{ui:SymbolIcon PuzzlePiece24}" TargetPageType="{x:Type pages:ModsPage}" />
                 <ui:NavigationViewItem Content="Plugins" Icon="{ui:SymbolIcon PlugConnected24}" TargetPageType="{x:Type pages:PluginsPage}" />
                 <ui:NavigationViewItem Content="Macros" Icon="{ui:SymbolIcon Keyboard24}" TargetPageType="{x:Type pages:MacrosPage}" />
                 <ui:NavigationViewItem Content="Customize" Icon="{ui:SymbolIcon PaintBrush24}" TargetPageType="{x:Type pages:CustomizationPage}" />
