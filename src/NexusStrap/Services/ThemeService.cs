@@ -97,6 +97,8 @@ public sealed class ThemeService
 
             Wpf.Ui.Appearance.ApplicationThemeManager.Apply(
                 theme.IsDark ? Wpf.Ui.Appearance.ApplicationTheme.Dark : Wpf.Ui.Appearance.ApplicationTheme.Light);
+
+            ShellBackgroundCoordinator.RequestRefresh();
         });
     }
 

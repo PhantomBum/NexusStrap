@@ -4,25 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
 
-    <ScrollViewer Style="{StaticResource PageScrollViewer}" Padding="24">
-        <StackPanel>
-            <TextBlock Text="Customization" FontSize="28" FontWeight="Bold" Margin="0,0,0,20" />
+    <ScrollViewer Style="{StaticResource PageScrollViewer}" Padding="28,20,28,32">
+        <StackPanel MaxWidth="920">
+            <TextBlock Text="Appearance" FontSize="28" FontWeight="Bold" Margin="0,0,0,6" />
+            <TextBlock Text="Themes, wallpaper, and cursors. Changes apply immediately where possible; Roblox cursor is applied on next launch." FontSize="13" Foreground="{DynamicResource ThemeMutedTextBrush}" TextWrapping="Wrap" Margin="0,0,0,22" />
 
-            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="12" Padding="22" Margin="0,0,0,14" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
                 <StackPanel>
-                    <TextBlock Text="Theme mode" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
-                    <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Theme" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,14" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <ui:Button Content="Dark" Icon="{ui:SymbolIcon WeatherMoon24}" Appearance="Primary"
                                    Command="{Binding ApplyDarkThemeCommand}" Margin="0,0,8,0" />
                         <ui:Button Content="Light" Icon="{ui:SymbolIcon WeatherSunny24}" Appearance="Secondary"
                                    Command="{Binding ApplyLightThemeCommand}" />
                     </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="Available themes" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <TextBlock Text="Installed &amp; built-in" FontSize="13" Foreground="{DynamicResource ThemeMutedTextBrush}" Margin="0,0,0,8" />
                     <ItemsControl ItemsSource="{Binding AvailableThemes}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -33,8 +29,9 @@
                             <DataTemplate>
                                 <ui:Button
                                     Margin="0,0,8,8"
-                                    Padding="12,8"
+                                    Padding="14,9"
                                     Content="{Binding Name}"
+                                    Appearance="Secondary"
                                     Command="{Binding DataContext.ApplyThemeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                     CommandParameter="{Binding}" />
                             </DataTemplate>
@@ -43,22 +40,66 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="8" Padding="20">
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="12" Padding="22" Margin="0,0,0,14" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
                 <StackPanel>
-                    <TextBlock Text="Background &amp; motion" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <TextBlock Text="Launcher wallpaper" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6" />
+                    <TextBlock Text="Shown behind the main window. Use a wide image for best results." FontSize="12" Foreground="{DynamicResource ThemeMutedTextBrush}" TextWrapping="Wrap" Margin="0,0,0,14" />
+
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <ui:Button Content="Browse image" Icon="{ui:SymbolIcon Image24}" Appearance="Secondary"
-                                   Command="{Binding BrowseBackgroundCommand}" Margin="0,0,12,0" />
-                        <TextBlock Text="{Binding CustomBackgroundPath}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Opacity="0.85" />
+                        <ui:Button Content="Choose image" Icon="{ui:SymbolIcon Image24}" Appearance="Primary"
+                                   Command="{Binding BrowseBackgroundCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Clear" Icon="{ui:SymbolIcon Dismiss24}" Appearance="Secondary"
+                                   Command="{Binding ClearBackgroundCommand}" />
                     </StackPanel>
-                    <StackPanel Margin="0,0,0,12">
-                        <TextBlock Text="Background opacity" Opacity="0.7" Margin="0,0,0,4" />
-                        <Slider Minimum="0" Maximum="1" Value="{Binding BackgroundOpacity, Mode=TwoWay}" TickFrequency="0.05" IsSnapToTickEnabled="True" />
-                    </StackPanel>
+                    <TextBlock Text="{Binding CustomBackgroundPath}" TextTrimming="CharacterEllipsis" Opacity="0.9" FontSize="12" Margin="0,0,0,14" />
+
+                    <TextBlock Text="Image strength" FontSize="12" Foreground="{DynamicResource ThemeMutedTextBrush}" Margin="0,0,0,6" />
+                    <Slider Minimum="0.02" Maximum="1" Value="{Binding BackgroundOpacity, Mode=TwoWay}" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="0,0,0,16" />
+
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Animations" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <TextBlock Text="UI animations" VerticalAlignment="Center" Margin="0,0,12,0" />
                         <ui:ToggleSwitch IsChecked="{Binding EnableAnimations, Mode=TwoWay}" />
                     </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="12" Padding="22" Margin="0,0,0,14" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="NexusStrap cursor" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6" />
+                    <TextBlock Text="Windows cursor files only (.cur / .ani)." FontSize="12" Foreground="{DynamicResource ThemeMutedTextBrush}" TextWrapping="Wrap" Margin="0,0,0,12" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <TextBlock Text="Use custom cursor" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <ui:ToggleSwitch IsChecked="{Binding UseCustomAppCursor, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="Browse .cur / .ani" Icon="{ui:SymbolIcon Cursor24}" Appearance="Secondary"
+                                   Command="{Binding BrowseAppCursorCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Reset" Icon="{ui:SymbolIcon ArrowCounterclockwise24}" Appearance="Secondary"
+                                   Command="{Binding ClearAppCursorCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding CustomAppCursorPath}" TextTrimming="CharacterEllipsis" Opacity="0.85" FontSize="12" Margin="0,10,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ThemeSurfaceBrush}" CornerRadius="12" Padding="22" Margin="0,0,0,14" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Roblox in-game cursor" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6" />
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource ThemeMutedTextBrush}" Margin="0,0,0,12">
+                        Copies your PNG into the player install as ArrowCursor (64×64 PNG recommended). Applied when NexusStrap launches Roblox. Roblox updates may replace files; re-apply if needed.
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <TextBlock Text="Enable" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <ui:ToggleSwitch IsChecked="{Binding EnableCustomRobloxCursor, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="Choose PNG" Icon="{ui:SymbolIcon Image24}" Appearance="Secondary"
+                                   Command="{Binding BrowseRobloxCursorCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Clear" Icon="{ui:SymbolIcon Dismiss24}" Appearance="Secondary"
+                                   Command="{Binding ClearRobloxCursorCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding CustomRobloxCursorPath}" TextTrimming="CharacterEllipsis" Opacity="0.85" FontSize="12" Margin="0,10,0,0" />
                 </StackPanel>
             </Border>
         </StackPanel>

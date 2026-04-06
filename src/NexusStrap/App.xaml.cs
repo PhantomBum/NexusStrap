@@ -50,6 +50,8 @@ public partial class App : Application
         var settingsService = Services.GetRequiredService<SettingsService>();
         settingsService.Load();
         settingsService.EnsureDirectories();
+        BundledContentInitializer.SeedIfNeeded(settingsService);
+        Services.GetRequiredService<ModManager>().LoadMods();
 
         var crashLogger = Services.GetRequiredService<CrashLogger>();
         crashLogger.RegisterGlobalHandlers();

@@ -14,8 +14,16 @@ public sealed class AppSettings
     public AppTheme Theme { get; set; } = AppTheme.Dark;
     public string? CustomThemePath { get; set; }
     public string? CustomBackgroundPath { get; set; }
-    public double BackgroundOpacity { get; set; } = 0.3;
+    public double BackgroundOpacity { get; set; } = 0.35;
     public bool EnableAnimations { get; set; } = true;
+
+    /// <summary>When set, NexusStrap uses this .cur/.ani for the launcher window (WPF).</summary>
+    public bool UseCustomAppCursor { get; set; }
+    public string? CustomAppCursorPath { get; set; }
+
+    /// <summary>Copy PNG into Roblox content as ArrowCursor (see RobloxCursorInstaller).</summary>
+    public bool EnableCustomRobloxCursor { get; set; }
+    public string? CustomRobloxCursorPath { get; set; }
 
     // Performance
     public bool EnableFpsUnlocker { get; set; } = true;

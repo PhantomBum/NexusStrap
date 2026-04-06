@@ -17,6 +17,12 @@ public partial class CustomizationViewModel : ObservableObject
     [ObservableProperty] private double _backgroundOpacity;
     [ObservableProperty] private bool _enableAnimations;
 
+    [ObservableProperty] private bool _useCustomAppCursor;
+    [ObservableProperty] private string _customAppCursorPath = "";
+
+    [ObservableProperty] private bool _enableCustomRobloxCursor;
+    [ObservableProperty] private string _customRobloxCursorPath = "";
+
     public CustomizationViewModel(ThemeService themeService, SettingsService settings)
     {
         _themeService = themeService;
@@ -26,6 +32,11 @@ public partial class CustomizationViewModel : ObservableObject
         BackgroundOpacity = settings.Settings.BackgroundOpacity;
         EnableAnimations = settings.Settings.EnableAnimations;
         CustomBackgroundPath = settings.Settings.CustomBackgroundPath ?? "";
+
+        UseCustomAppCursor = settings.Settings.UseCustomAppCursor;
+        CustomAppCursorPath = settings.Settings.CustomAppCursorPath ?? "";
+        EnableCustomRobloxCursor = settings.Settings.EnableCustomRobloxCursor;
+        CustomRobloxCursorPath = settings.Settings.CustomRobloxCursorPath ?? "";
 
         RefreshThemes();
     }
@@ -60,18 +71,94 @@ public partial class CustomizationViewModel : ObservableObject
             CustomBackgroundPath = dialog.FileName;
             _settings.Settings.CustomBackgroundPath = dialog.FileName;
             _settings.SaveSettings();
+            ShellBackgroundCoordinator.RequestRefresh();
         }
+    }
+
+    [RelayCommand]
+    private void ClearBackground()
+    {
+        CustomBackgroundPath = "";
+        _settings.Settings.CustomBackgroundPath = null;
+        _settings.SaveSettings();
+        ShellBackgroundCoordinator.RequestRefresh();
+    }
+
+    [RelayCommand]
+    private void BrowseAppCursor()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "Cursor|*.cur;*.ani|All Files|*.*"
+        };
+        if (dialog.ShowDialog() == true)
+        {
+            CustomAppCursorPath = dialog.FileName;
+            _settings.Settings.CustomAppCursorPath = dialog.FileName;
+            _settings.SaveSettings();
+            ShellBackgroundCoordinator.RequestAppCursorRefresh();
+        }
+    }
+
+    [RelayCommand]
+    private void ClearAppCursor()
+    {
+        CustomAppCursorPath = "";
+        _settings.Settings.CustomAppCursorPath = null;
+        _settings.Settings.UseCustomAppCursor = false;
+        UseCustomAppCursor = false;
+        _settings.SaveSettings();
+        ShellBackgroundCoordinator.RequestAppCursorRefresh();
+    }
+
+    [RelayCommand]
+    private void BrowseRobloxCursor()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "PNG image|*.png|All Files|*.*"
+        };
+        if (dialog.ShowDialog() == true)
+        {
+            CustomRobloxCursorPath = dialog.FileName;
+            _settings.Settings.CustomRobloxCursorPath = dialog.FileName;
+            _settings.SaveSettings();
+        }
+    }
+
+    [RelayCommand]
+    private void ClearRobloxCursor()
+    {
+        CustomRobloxCursorPath = "";
+        _settings.Settings.CustomRobloxCursorPath = null;
+        _settings.Settings.EnableCustomRobloxCursor = false;
+        EnableCustomRobloxCursor = false;
+        _settings.SaveSettings();
     }
 
     partial void OnBackgroundOpacityChanged(double value)
     {
         _settings.Settings.BackgroundOpacity = value;
         _settings.SaveSettings();
+        ShellBackgroundCoordinator.RequestRefresh();
     }
 
     partial void OnEnableAnimationsChanged(bool value)
     {
         _settings.Settings.EnableAnimations = value;
+        _settings.SaveSettings();
+    }
+
+    partial void OnUseCustomAppCursorChanged(bool value)
+    {
+        _settings.Settings.UseCustomAppCursor = value;
+        _settings.SaveSettings();
+        ShellBackgroundCoordinator.RequestAppCursorRefresh();
+    }
+
+    partial void OnEnableCustomRobloxCursorChanged(bool value)
+    {
+        _settings.Settings.EnableCustomRobloxCursor = value;
         _settings.SaveSettings();
     }
 }

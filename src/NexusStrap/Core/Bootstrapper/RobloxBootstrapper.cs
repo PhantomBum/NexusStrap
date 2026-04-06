@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using NexusStrap.Core.FastFlags;
+using NexusStrap.Core.Mods;
 using NexusStrap.Models;
 using NexusStrap.Services;
 
@@ -12,6 +13,7 @@ public sealed class RobloxBootstrapper
     private readonly PackageExtractor _packageExtractor;
     private readonly ProtocolHandler _protocolHandler;
     private readonly FastFlagManager _fastFlagManager;
+    private readonly ModManager _modManager;
     private readonly SettingsService _settings;
     private readonly LogService _log;
     private readonly EventBus _eventBus;
@@ -25,6 +27,7 @@ public sealed class RobloxBootstrapper
         PackageExtractor packageExtractor,
         ProtocolHandler protocolHandler,
         FastFlagManager fastFlagManager,
+        ModManager modManager,
         SettingsService settings,
         LogService log,
         EventBus eventBus)
@@ -34,9 +37,18 @@ public sealed class RobloxBootstrapper
         _packageExtractor = packageExtractor;
         _protocolHandler = protocolHandler;
         _fastFlagManager = fastFlagManager;
+        _modManager = modManager;
         _settings = settings;
         _log = log;
         _eventBus = eventBus;
+    }
+
+    private void PrepareRobloxInstallDirectory(string versionDir)
+    {
+        _modManager.LoadMods();
+        if (_settings.Settings.EnableMods)
+            _modManager.ApplyEnabledMods();
+        RobloxCursorInstaller.ApplyCustomCursor(_settings, versionDir, _log);
     }
 
     public async Task<bool> RunAsync(string? launchUri = null, CancellationToken ct = default)
@@ -65,6 +77,7 @@ public sealed class RobloxBootstrapper
 
                 _log.Warning("Version API unavailable: launching from local install {Dir}", offlineDir);
                 StatusChanged?.Invoke("Applying settings...");
+                PrepareRobloxInstallDirectory(offlineDir);
                 _fastFlagManager.ApplyFlags(offlineDir);
                 StatusChanged?.Invoke("Launching Roblox...");
                 await LaunchRobloxFromDirectoryAsync(offlineDir, launchUri, ct);
@@ -131,6 +144,7 @@ public sealed class RobloxBootstrapper
             }
 
             StatusChanged?.Invoke("Applying settings...");
+            PrepareRobloxInstallDirectory(versionDir);
             _fastFlagManager.ApplyFlags(versionDir);
 
             StatusChanged?.Invoke("Launching Roblox...");

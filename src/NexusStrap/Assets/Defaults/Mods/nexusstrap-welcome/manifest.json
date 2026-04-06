@@ -1,0 +1,11 @@
+{
+  "id": "nexusstrap.welcome",
+  "name": "Welcome (sample mod)",
+  "description": "Example mod entry shipped with NexusStrap. Add file mappings in manifest.json when you have files to overlay into the Roblox player folder.",
+  "author": "NexusStrap",
+  "version": "1.0.0",
+  "isEnabled": false,
+  "directoryPath": "",
+  "fileMappings": [],
+  "tags": ["sample", "documentation"]
+}
